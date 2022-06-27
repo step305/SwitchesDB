@@ -1,0 +1,2 @@
+future~=0.18.2
+fonttools~=4.33.3
