@@ -29,6 +29,17 @@ class SwitchDB:
             self.cursor.execute(sql_req)
             self.base_connection.commit()
 
+            sql_req = 'INSERT OR IGNORE INTO switches (wafer, sector, serial, r_on, r_off, threshold, date) ' \
+                      'VALUES (?,?,?,?,?,?,?);'
+            self.cursor.execute(sql_req, (-1,
+                                          -1,
+                                          -1,
+                                          -1,
+                                          -1,
+                                          -1,
+                                          datetime.datetime.now()))
+            self.base_connection.commit()
+
             self.cursor.close()
 
         except sqlite3.Error as error:
