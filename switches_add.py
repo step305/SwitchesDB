@@ -28,11 +28,11 @@ def center(window_instance):
     screen_height = window_instance.winfo_screenheight()
 
     size = tuple(int(_) for _ in window_instance.geometry().split('+')[0].split('x'))
-    x = screen_width/2 - size[0]/2
-    y = screen_height/2 - size[1]/2
+    x = screen_width / 2 - size[0] / 2
+    y = screen_height / 2 - size[1] / 2
 
     window_instance.geometry("+%d+%d" % (x, y))
-    window_instance.title("Centered!")
+    window_instance.title("Добавление ключа")
 
 
 def add_new_record(entries):
@@ -41,7 +41,10 @@ def add_new_record(entries):
         for field in entries:
             not_empty_fields = not_empty_fields and not not field.get()
         if not_empty_fields:
-            switch = Switch.Switch(switch_id=entries[0].get(),
+            wafer, sector, serial = entries[0].get().split(',')
+            switch = Switch.Switch(wafer=wafer,
+                                   sector=sector,
+                                   switch_id=serial,
                                    r_on=float(entries[1].get()),
                                    r_off=float(entries[2].get()),
                                    threshold=float(entries[3].get()))
@@ -54,7 +57,8 @@ def add_new_record(entries):
 def enter_callback(event):
     act_widget = window.focus_get()
     if act_widget == input_fields[0]:
-        sw = db.get(input_fields[0].get())
+        wafer, sector, serial = input_fields[0].get().split(',')
+        sw = db.get(int(wafer), int(sector), int(serial))
         if sw:
             input_fields[1].delete(0, tkinter.END)
             input_fields[1].insert(0, '{:.2f}'.format(sw.r_on))
@@ -104,7 +108,7 @@ if __name__ == '__main__':
 
     sw = db.get_last()
     input_fields[0].delete(0, tkinter.END)
-    input_fields[0].insert(0, '{}'.format(sw.id))
+    input_fields[0].insert(0, '{},{},{}'.format(sw.wafer, sw.sector, sw.id))
     input_fields[1].delete(0, tkinter.END)
     input_fields[1].insert(0, '{:.2f}'.format(sw.r_on))
     input_fields[2].delete(0, tkinter.END)
