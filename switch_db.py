@@ -22,7 +22,7 @@ class SwitchDB:
                       'r_off REAL NOT NULL,' \
                       'threshold REAL NOT NULL,' \
                       'date TIMESTAMP NOT NULL,' \
-                      'UNIQUE (wafer, sector, serial) ON CONFLICT IGNORE);'
+                      'UNIQUE (wafer, sector, serial, date) ON CONFLICT IGNORE);'
             self.cursor.execute(sql_req)
             self.base_connection.commit()
 
